@@ -27,6 +27,9 @@ public class BattleStateMachine : MonoBehaviour
 
     public int baseDmg, enemyBaseDmg, dmg1, eDmg1;
 
+    float x, y, w, h;
+    string potName;
+
 	// Use this for initialization
 	void Start ()
     {
@@ -52,6 +55,12 @@ public class BattleStateMachine : MonoBehaviour
                 //
                 break;
             case BattleStates.PLAYERCHOISE:
+                //
+                break;
+            case BattleStates.USEITEM:
+                //
+                break;
+            case BattleStates.CHANGEMONSTER:
                 //
                 break;
             case BattleStates.ENEMYCHOISE:
@@ -89,7 +98,7 @@ public class BattleStateMachine : MonoBehaviour
             }
             else if (GUI.Button(new Rect(buttonPosX, buttonPosY + 80f, buttonWidth, buttonHeight), "Items"))
             {
-
+                currentState = BattleStates.USEITEM;
             }
             else if (GUI.Button(new Rect(buttonPosX + 80f, buttonPosY + 80f, buttonWidth, buttonHeight), "Run"))
             {
@@ -108,7 +117,17 @@ public class BattleStateMachine : MonoBehaviour
         }
         else if (currentState == BattleStates.USEITEM)
         {
-            // enemy attacks, uses items etc.
+            PlayerInventory playerInventory = GetComponent<PlayerInventory>();
+            for (int i = 0; i < playerInventory.playerItems.Count; i++)
+            {
+                x += i + 20;
+                y += i + 20;
+                w += 40;
+                h += 20;
+                potName = playerInventory.pot1.PotionName;
+
+                GUI.Button(new Rect(x, y, w, h), potName);
+            }
         }
         else if (currentState == BattleStates.CHANGEMONSTER)
         {
@@ -124,8 +143,16 @@ public class BattleStateMachine : MonoBehaviour
             else if(enemyHPAmount <= 0)
             {
                 enemyHPAmount = 0;
-                Debug.Log("you won");
+                currentState = BattleStates.WIN;
             }
+        }
+        else if (currentState == BattleStates.WIN)
+        {
+            Debug.Log("you won");
+        }
+        else if (currentState == BattleStates.LOSE)
+        {
+            Debug.Log("you lost");
         }
     }
 
@@ -191,7 +218,7 @@ public class BattleStateMachine : MonoBehaviour
         else if(allyHPAmount <= 0)
         {
             allyHPAmount = 0;
-            Debug.Log("you lost");
+            currentState = BattleStates.LOSE;
         }  
     }
     
@@ -217,7 +244,7 @@ public class BattleStateMachine : MonoBehaviour
         else
         {
             allyHPAmount = 0;
-            Debug.Log("you lost");
+            currentState = BattleStates.LOSE;
         }
     }
 
