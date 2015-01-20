@@ -127,7 +127,8 @@ public class BattleStateMachine : MonoBehaviour
             {
                 if(GUI.Button(new Rect(20, 20 + offSet, 100, 20), i))
                 {
-                    Debug.Log("pressed button " + i);
+                    // chack if there is still pots
+                    playerInventory.playerItemsName.RemoveAt(0);
                 }
                 offSet += 25;
             }
