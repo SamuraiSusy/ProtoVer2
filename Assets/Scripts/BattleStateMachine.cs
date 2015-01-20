@@ -27,8 +27,9 @@ public class BattleStateMachine : MonoBehaviour
 
     public int baseDmg, enemyBaseDmg, dmg1, eDmg1;
 
-    float x, y, w, h;
-    string potName;
+    private float x, y, w, h;
+    private string potName;
+    public GameObject PlayerInventory;
 
 	// Use this for initialization
 	void Start ()
@@ -43,6 +44,8 @@ public class BattleStateMachine : MonoBehaviour
         buttonPosY = menuPosY + 20;
         buttonWidth = 60;
         buttonHeight = 40;
+
+        PlayerInventory = GameObject.FindWithTag("PlayerInventory");
 	}
 	
 	 // Update is called once per frame
@@ -117,16 +120,16 @@ public class BattleStateMachine : MonoBehaviour
         }
         else if (currentState == BattleStates.USEITEM)
         {
-            PlayerInventory playerInventory = GetComponent<PlayerInventory>();
-            for (int i = 0; i < playerInventory.playerItems.Count; i++)
+            PlayerInventory playerInventory;
+            playerInventory = PlayerInventory.GetComponent<PlayerInventory>();
+            float offSet = 0;
+            foreach (string i in playerInventory.playerItemsName)
             {
-                x += i + 20;
-                y += i + 20;
-                w += 40;
-                h += 20;
-                potName = playerInventory.pot1.PotionName;
-
-                GUI.Button(new Rect(x, y, w, h), potName);
+                if(GUI.Button(new Rect(20, 20 + offSet, 100, 20), i))
+                {
+                    Debug.Log("pressed button " + i);
+                }
+                offSet += 25;
             }
         }
         else if (currentState == BattleStates.CHANGEMONSTER)
