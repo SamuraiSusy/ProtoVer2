@@ -36,7 +36,6 @@ public class BattleStateMachine : MonoBehaviour
 	 // Update is called once per frame
     void Update ()
     {
-        // OnGUI things here??
         Debug.Log(currentState);
         switch(currentState)
         {
@@ -44,6 +43,9 @@ public class BattleStateMachine : MonoBehaviour
                 //
                 break;
             case BattleStates.PLAYERCHOISE:
+                //
+                break;
+            case BattleStates.ATTACK:
                 //
                 break;
             case BattleStates.USEITEM:
@@ -72,29 +74,12 @@ public class BattleStateMachine : MonoBehaviour
 
     void OnGUI()
     {
-        GUIElements guiElements = GUIThings.GetComponent<GUIElements>();
         PlayerBattle playerBattle = BattlePlayer.GetComponent<PlayerBattle>();
         EnemyBattle enemyBattle = BattleEnemy.GetComponent<EnemyBattle>();
 
-        if(currentState == BattleStates.PLAYERCHOISE)
+        if (currentState == BattleStates.PLAYERCHOISE)
         {
-            GUI.Box(new Rect(guiElements.menuPosX, guiElements.menuPosY, guiElements.screenCenterX / 1.5f, guiElements.screenCenterY / 1.5f), "Menu");
-            if (GUI.Button(new Rect(guiElements.buttonPosX, guiElements.buttonPosY, guiElements.buttonWidth, guiElements.buttonHeight), "Attack"))
-            {
-                currentState = BattleStates.ATTACK;
-            }
-            else if (GUI.Button(new Rect(guiElements.buttonPosX + 80f, guiElements.buttonPosY, guiElements.buttonWidth, guiElements.buttonHeight), "Monster"))
-            {
-
-            }
-            else if (GUI.Button(new Rect(guiElements.buttonPosX, guiElements.buttonPosY + 80f, guiElements.buttonWidth, guiElements.buttonHeight), "Items"))
-            {
-                currentState = BattleStates.USEITEM;
-            }
-            else if (GUI.Button(new Rect(guiElements.buttonPosX + 80f, guiElements.buttonPosY + 80f, guiElements.buttonWidth, guiElements.buttonHeight), "Run"))
-            {
-
-            }
+            PlayerChoise();
         }
         else if (currentState == BattleStates.ATTACK)
         {
@@ -108,24 +93,13 @@ public class BattleStateMachine : MonoBehaviour
         }
         else if (currentState == BattleStates.USEITEM)
         {
-            PlayerInventory playerInventory;
-            playerInventory = PlayerInventory.GetComponent<PlayerInventory>();
-            float offSet = 0;
-            foreach (string i in playerInventory.playerItemsName)
-            {
-                if(GUI.Button(new Rect(20, 20 + offSet, 100, 20), i))
-                {
-                    // chack if there is still pots
-                    playerInventory.playerItemsName.RemoveAt(0);
-                }
-                offSet += 25;
-            }
+            playerBattle.UseItem();
         }
         else if (currentState == BattleStates.CHANGEMONSTER)
         {
-            //
+            playerBattle.ChangeMonster();
         }
-        else if(currentState == BattleStates.ENEMYCHOISE)
+        else if (currentState == BattleStates.ENEMYCHOISE)
         {
             if (enemyBattle.enemyHPAmount > 0)
             {
@@ -140,12 +114,62 @@ public class BattleStateMachine : MonoBehaviour
         }
         else if (currentState == BattleStates.WIN)
         {
-            Debug.Log("you won");
+            Win();
         }
         else if (currentState == BattleStates.LOSE)
         {
-            Debug.Log("you lost");
+            Lose();
         }
+    }
+
+    void PlayerChoise()
+    {
+        GUIElements guiElements = GUIThings.GetComponent<GUIElements>();
+
+        GUI.Box(new Rect(guiElements.menuPosX, guiElements.menuPosY, guiElements.screenCenterX / 1.5f, guiElements.screenCenterY / 1.5f), "Menu");
+        if (GUI.Button(new Rect(guiElements.buttonPosX, guiElements.buttonPosY, guiElements.buttonWidth, guiElements.buttonHeight), "Attack"))
+        {
+            currentState = BattleStates.ATTACK;
+        }
+        else if (GUI.Button(new Rect(guiElements.buttonPosX + 80f, guiElements.buttonPosY, guiElements.buttonWidth, guiElements.buttonHeight), "Monster"))
+        {
+            currentState = BattleStates.CHANGEMONSTER;
+            Invoke("ChangeToPlayerChoise", 2f);
+        }
+        else if (GUI.Button(new Rect(guiElements.buttonPosX, guiElements.buttonPosY + 80f, guiElements.buttonWidth, guiElements.buttonHeight), "Items"))
+        {
+            currentState = BattleStates.USEITEM;
+        }
+        else if (GUI.Button(new Rect(guiElements.buttonPosX + 80f, guiElements.buttonPosY + 80f, guiElements.buttonWidth, guiElements.buttonHeight), "Run"))
+        {
+
+        }
+    }
+
+    void EnemyChoise()
+    {
+        EnemyBattle enemyBattle = BattleEnemy.GetComponent<EnemyBattle>();
+
+        if (enemyBattle.enemyHPAmount > 0)
+        {
+            enemyBattle.EnemyTurn();
+            Invoke("ChangeToPlayerChoise", 3f);
+        }
+        else if (enemyBattle.enemyHPAmount <= 0)
+        {
+            enemyBattle.enemyHPAmount = 0;
+            currentState = BattleStates.WIN;
+        }
+    }
+
+    void Win()
+    {
+        Debug.Log("you won");
+    }
+
+    void Lose()
+    {
+        Debug.Log("you lost");
     }
 
     public void ChangeToPlayerChoise()

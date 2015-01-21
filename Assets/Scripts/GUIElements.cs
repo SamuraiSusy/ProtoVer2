@@ -40,6 +40,10 @@ public class GUIElements : MonoBehaviour
             DrawPlayerInformation();
             DrawEnemyInformation();
         }
+        else
+        {
+            Debug.Log("lololo");
+        }
 	}
 
     void DrawPlayerInformation()

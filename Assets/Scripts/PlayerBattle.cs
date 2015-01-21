@@ -1,26 +1,28 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Linq;
 
 public class PlayerBattle : MonoBehaviour
 {
-    public GameObject GUIThings, StateMachine, BattleEnemy;
+    public GameObject GUIThings, StateMachine, BattleEnemy, PlayerInventory;
 
     public int allyHPAmount;
     public int baseDmg, dmg1;
 
-	// Use this for initialization
-	void Start ()
+    // Use this for initialization
+    void Start()
     {
         GUIThings = GameObject.FindWithTag("GUI");
         StateMachine = GameObject.FindWithTag("BattleState");
         BattleEnemy = GameObject.FindWithTag("EnemyBattle");
-	}
-	
-	// Update is called once per frame
-	void Update ()
+        PlayerInventory = GameObject.FindWithTag("PlayerInventory");
+    }
+
+    // Update is called once per frame
+    void Update()
     {
-	
-	}
+        InventoryCount();
+    }
 
     public void Attack()
     {
@@ -55,5 +57,44 @@ public class PlayerBattle : MonoBehaviour
         {
             stateMachine.currentState = BattleStateMachine.BattleStates.PLAYERCHOISE;
         }
+    }
+
+    public void UseItem()
+    {
+        PlayerInventory playerInventory = PlayerInventory.GetComponent<PlayerInventory>();
+
+        bool isEmpty = !playerInventory.playerItemsID.Any();
+        float offSet = 0;
+
+        // EI TOIMI
+        for (int i = playerInventory.playerItemsID.Count - 1; i >= 0; i--)
+        {
+            if(GUI.Button(new Rect(Screen.width / 2 - 100, 20 + offSet, 100, 20), playerInventory.pot1.PotionName))
+            {
+                if(isEmpty == false)
+                {
+                    Debug.Log("deleted");
+                    playerInventory.playerItemsName.RemoveAt(0);
+                }
+                else
+                {
+                    BattleStateMachine stateMachine = StateMachine.GetComponent<BattleStateMachine>();
+                    stateMachine.ChangeToPlayerChoise();
+                }
+            }
+            offSet += 25;
+        }
+    }
+
+    public void ChangeMonster()
+    {
+        Debug.Log("change that babyy");
+    }
+
+    void InventoryCount()
+    {
+        PlayerInventory playerInventory = PlayerInventory.GetComponent<PlayerInventory>();
+
+        Debug.Log(playerInventory.playerItemsID.Count);
     }
 }
