@@ -1,0 +1,10 @@
+scripts that should be created:
+- BattleStateMachine
+- GUI Elements
+- PlayerBattle
+- EnemyBattle (AI)
+- Item
+- BasePotion : Item
+- ScreenSettigns
+- PlayerInventory
+- EnemyInventory (possible to add items from inspector...)
