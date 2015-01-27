@@ -2,6 +2,7 @@
 using System.Collections;
 
 // MAYBE CHANGE THIS CLASS TO STATIC???????
+// in real game dont use GUI.button, use gameobjects instead
 
 public class BattleStateMachine : MonoBehaviour
 {

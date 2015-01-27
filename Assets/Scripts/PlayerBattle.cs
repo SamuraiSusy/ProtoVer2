@@ -1,21 +1,38 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Linq;
+using System.Collections.Generic;
 
 public class PlayerBattle : MonoBehaviour
 {
     public GameObject GUIThings, StateMachine, BattleEnemy, PlayerInventory;
 
+    private int allyMaxHP;
     public int allyHPAmount;
     public int baseDmg, dmg1;
+
+    private bool isButtonPressed;
+    private bool[] inventoryButtons;
+    private List<bool> invButtons;
+    
 
     // Use this for initialization
     void Start()
     {
+
         GUIThings = GameObject.FindWithTag("GUI");
         StateMachine = GameObject.FindWithTag("BattleState");
         BattleEnemy = GameObject.FindWithTag("EnemyBattle");
         PlayerInventory = GameObject.FindWithTag("PlayerInventory");
+
+
+        PlayerInventory playerInventory = PlayerInventory.GetComponent<PlayerInventory>();
+
+        allyMaxHP = 55;
+        isButtonPressed = false;
+
+        invButtons = new List<bool>(playerInventory.playerItemsID.Count);
+        Debug.Log(invButtons.Count);
     }
 
     // Update is called once per frame
@@ -63,27 +80,35 @@ public class PlayerBattle : MonoBehaviour
     {
         PlayerInventory playerInventory = PlayerInventory.GetComponent<PlayerInventory>();
 
+        BattleStateMachine stateMachine = StateMachine.GetComponent<BattleStateMachine>();
+        InventoryCount(); // debug function
+
         bool isEmpty = !playerInventory.playerItemsID.Any();
         float offSet = 0;
 
-        // EI TOIMI
-        for (int i = playerInventory.playerItemsID.Count - 1; i >= 0; i--)
+        for (int i = 0; i < playerInventory.playerItemsID.Count; i++)
         {
-            if(GUI.Button(new Rect(Screen.width / 2 - 100, 20 + offSet, 100, 20), playerInventory.pot1.PotionName))
-            {
-                if(isEmpty == false)
-                {
-                    Debug.Log("deleted");
-                    playerInventory.playerItemsName.RemoveAt(0);
-                }
-                else
-                {
-                    BattleStateMachine stateMachine = StateMachine.GetComponent<BattleStateMachine>();
-                    stateMachine.ChangeToPlayerChoise();
-                }
-            }
-            offSet += 25;
+            invButtons.Add(GUI.Button(new Rect(Screen.width / 2.5f, Screen.height / 5.1f + offSet + i, 100, 50), playerInventory.pot1.PotionName));
+            offSet += 60;
+            Debug.Log(i);
         }
+        foreach(bool but in invButtons)
+        {
+            if (but)
+            {
+                Debug.Log("yay");
+            }
+            if (GUI.Button(new Rect(10, 10, 10, 10), "lo"))
+            {
+                Debug.Log("lolo");
+            }
+            // no ei ittu toimi
+        }
+        stateMachine.currentState = BattleStateMachine.BattleStates.PLAYERCHOISE;
+        //invButtons.Add(GUI.Button(new Rect(Screen.width / 2.5f, Screen.height / 5.1f + offSet, 100, 50), playerInventory.pot1.PotionName));
+        //Debug.Log("inv buttons count " + invButtons.Count);
+
+
     }
 
     public void ChangeMonster()
@@ -95,6 +120,11 @@ public class PlayerBattle : MonoBehaviour
     {
         PlayerInventory playerInventory = PlayerInventory.GetComponent<PlayerInventory>();
 
-        Debug.Log(playerInventory.playerItemsID.Count);
+        Debug.Log("in player inventory: " + playerInventory.playerItemsID.Count);
+    }
+
+    void AddToInventory()
+    {
+        // if the player finds items...
     }
 }

@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Linq;
 using System.Collections.Generic;
 
 public class PlayerInventory : MonoBehaviour
@@ -20,14 +21,8 @@ public class PlayerInventory : MonoBehaviour
         pot1.HealAmount = 20;
         pot1.PotionID = 10;
 
-        //playerItems = new List<Item>(pots);
-
-        //playerItemsName = new List<string>(potsName);
-        playerItemsName = new List<string>();
-        playerItemsName.Add(pot1.PotionName); 
-        playerItemsName.Add(pot1.PotionName);
-        playerItemsName.Add(pot1.PotionName);
-
+        // maybe have to do list for every item separately
+        // OR DO ONE DICTIONARY :OOO maybe? n.n
         playerItemsID = new List<int>();
         playerItemsID.Add(pot1.PotionID);
         playerItemsID.Add(pot1.PotionID);
