@@ -12,7 +12,6 @@ public class PlayerBattle : MonoBehaviour
     public int baseDmg, dmg1;
 
     private bool isButtonPressed;
-    private bool[] inventoryButtons;
     private List<bool> invButtons;
     
 
@@ -32,7 +31,6 @@ public class PlayerBattle : MonoBehaviour
         isButtonPressed = false;
 
         invButtons = new List<bool>(playerInventory.playerItemsID.Count);
-        Debug.Log(invButtons.Count);
     }
 
     // Update is called once per frame
@@ -77,7 +75,8 @@ public class PlayerBattle : MonoBehaviour
     }
 
     public void UseItem()
-    {
+    {   
+        int n = 0;
         PlayerInventory playerInventory = PlayerInventory.GetComponent<PlayerInventory>();
 
         BattleStateMachine stateMachine = StateMachine.GetComponent<BattleStateMachine>();
@@ -86,29 +85,31 @@ public class PlayerBattle : MonoBehaviour
         bool isEmpty = !playerInventory.playerItemsID.Any();
         float offSet = 0;
 
-        for (int i = 0; i < playerInventory.playerItemsID.Count; i++)
+        // TÄÄ ALKAA TEKEE BUTTONEI IKUISEST VAIK playerInventory.playerItemsID.Count ON KOKO AJA 3
+        //for (int i = 0; i < /*playerInventory.playerItemsID.Count*/3; i++)
+        //{
+        //    invButtons.Add(GUI.Button(new Rect(Screen.width / 2.5f, Screen.height / 5.1f + offSet + i, 100, 50), playerInventory.pot1.PotionName));
+        //    offSet += 60;
+
+        //    Debug.Log(invButtons.Count);
+        //}
+        // SAMA TAPAHTUU TÄÄL, TON PITÄIS OL KOLME MUT LOOPPAA IKUISEST
+        while (n < 3)
         {
-            invButtons.Add(GUI.Button(new Rect(Screen.width / 2.5f, Screen.height / 5.1f + offSet + i, 100, 50), playerInventory.pot1.PotionName));
+            invButtons.Add(GUI.Button(new Rect(Screen.width / 2.5f, Screen.height / 5.1f + offSet, 100, 50), playerInventory.pot1.PotionName));
             offSet += 60;
-            Debug.Log(i);
+
+            Debug.Log("invbutton count " + invButtons.Count);
+            Debug.Log("playeritemsid count " + playerInventory.playerItemsID.Count);
+            n++;
         }
-        foreach(bool but in invButtons)
+        foreach(bool buttons in invButtons)
         {
-            if (but)
+            if(buttons)
             {
-                Debug.Log("yay");
+                invButtons.RemoveAt(0);
             }
-            if (GUI.Button(new Rect(10, 10, 10, 10), "lo"))
-            {
-                Debug.Log("lolo");
-            }
-            // no ei ittu toimi
         }
-        stateMachine.currentState = BattleStateMachine.BattleStates.PLAYERCHOISE;
-        //invButtons.Add(GUI.Button(new Rect(Screen.width / 2.5f, Screen.height / 5.1f + offSet, 100, 50), playerInventory.pot1.PotionName));
-        //Debug.Log("inv buttons count " + invButtons.Count);
-
-
     }
 
     public void ChangeMonster()
