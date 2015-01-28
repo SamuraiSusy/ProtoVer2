@@ -94,22 +94,37 @@ public class PlayerBattle : MonoBehaviour
         //    Debug.Log(invButtons.Count);
         //}
         // SAMA TAPAHTUU TÄÄL, TON PITÄIS OL KOLME MUT LOOPPAA IKUISEST
-        while (n < 3)
+        //while (n < 3)
+        //{
+        //    invButtons.Add(GUI.Button(new Rect(Screen.width / 2.5f, Screen.height / 5.1f + offSet, 100, 50), playerInventory.pot1.PotionName));
+        //    offSet += 60;
+
+        //    Debug.Log("invbutton count " + invButtons.Count);
+        //    Debug.Log("playeritemsid count " + playerInventory.playerItemsID.Count);
+        //    Debug.Log("n " + n);
+        //    n++;
+        //}
+        for (int i = 0; i < 3; i++)
         {
-            invButtons.Add(GUI.Button(new Rect(Screen.width / 2.5f, Screen.height / 5.1f + offSet, 100, 50), playerInventory.pot1.PotionName));
-            offSet += 60;
+            if (i < 3)
+            {
+                invButtons.Add(GUI.Button(new Rect(Screen.width / 2.5f, Screen.height / 5.1f + offSet, 100, 50), playerInventory.pot1.PotionName));
+                offSet += 60;
+            }
+            else
+                break;
 
             Debug.Log("invbutton count " + invButtons.Count);
             Debug.Log("playeritemsid count " + playerInventory.playerItemsID.Count);
-            n++;
+            Debug.Log("n " + i);
         }
-        foreach(bool buttons in invButtons)
-        {
-            if(buttons)
+            foreach (bool buttons in invButtons)
             {
-                invButtons.RemoveAt(0);
+                if (buttons)
+                {
+                    invButtons.RemoveAt(0);
+                }
             }
-        }
     }
 
     public void ChangeMonster()

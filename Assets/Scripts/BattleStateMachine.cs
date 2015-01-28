@@ -10,9 +10,6 @@ public class BattleStateMachine : MonoBehaviour
     {
         START,
         PLAYERCHOISE,
-        ATTACK,
-        USEITEM,
-        CHANGEMONSTER,
         ENEMYCHOISE,
         RUN,
         WIN,
@@ -46,15 +43,6 @@ public class BattleStateMachine : MonoBehaviour
             case BattleStates.PLAYERCHOISE:
                 //
                 break;
-            case BattleStates.ATTACK:
-                //
-                break;
-            case BattleStates.USEITEM:
-                //
-                break;
-            case BattleStates.CHANGEMONSTER:
-                //
-                break;
             case BattleStates.ENEMYCHOISE:
                 //
                 break;
@@ -81,24 +69,6 @@ public class BattleStateMachine : MonoBehaviour
         if (currentState == BattleStates.PLAYERCHOISE)
         {
             PlayerChoise();
-        }
-        else if (currentState == BattleStates.ATTACK)
-        {
-            if (playerBattle.allyHPAmount > 0)
-                playerBattle.Attack();
-            else if (playerBattle.allyHPAmount <= 0)
-            {
-                playerBattle.allyHPAmount = 0;
-                Debug.Log("you lost");
-            }
-        }
-        else if (currentState == BattleStates.USEITEM)
-        {
-            playerBattle.UseItem();
-        }
-        else if (currentState == BattleStates.CHANGEMONSTER)
-        {
-            playerBattle.ChangeMonster();
         }
         else if (currentState == BattleStates.ENEMYCHOISE)
         {
@@ -130,16 +100,26 @@ public class BattleStateMachine : MonoBehaviour
         GUI.Box(new Rect(guiElements.menuPosX, guiElements.menuPosY, guiElements.screenCenterX / 1.5f, guiElements.screenCenterY / 1.5f), "Menu");
         if (GUI.Button(new Rect(guiElements.buttonPosX, guiElements.buttonPosY, guiElements.buttonWidth, guiElements.buttonHeight), "Attack"))
         {
-            currentState = BattleStates.ATTACK;
+            PlayerBattle playerBattle = BattlePlayer.GetComponent<PlayerBattle>();
+            if (playerBattle.allyHPAmount > 0)
+                playerBattle.Attack();
+            else if (playerBattle.allyHPAmount <= 0)
+            {
+                playerBattle.allyHPAmount = 0;
+                Debug.Log("you lost");
+            }
         }
         else if (GUI.Button(new Rect(guiElements.buttonPosX + 80f, guiElements.buttonPosY, guiElements.buttonWidth, guiElements.buttonHeight), "Monster"))
         {
-            currentState = BattleStates.CHANGEMONSTER;
+            PlayerBattle playerBattle = BattlePlayer.GetComponent<PlayerBattle>();
+            //currentState = BattleStates.CHANGEMONSTER;
+            playerBattle.ChangeMonster();
             Invoke("ChangeToPlayerChoise", 2f);
         }
         else if (GUI.Button(new Rect(guiElements.buttonPosX, guiElements.buttonPosY + 80f, guiElements.buttonWidth, guiElements.buttonHeight), "Items"))
         {
-            currentState = BattleStates.USEITEM;
+            PlayerBattle playerBattle = BattlePlayer.GetComponent<PlayerBattle>();
+            playerBattle.UseItem();
         }
         else if (GUI.Button(new Rect(guiElements.buttonPosX + 80f, guiElements.buttonPosY + 80f, guiElements.buttonWidth, guiElements.buttonHeight), "Run"))
         {

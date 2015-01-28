@@ -33,8 +33,7 @@ public class GUIElements : MonoBehaviour
     {
         BattleStateMachine stateMachine = StateMachine.GetComponent<BattleStateMachine>();
 
-        if(stateMachine.currentState == BattleStateMachine.BattleStates.ATTACK ||
-            stateMachine.currentState == BattleStateMachine.BattleStates.ENEMYCHOISE ||
+        if(stateMachine.currentState == BattleStateMachine.BattleStates.ENEMYCHOISE ||
             stateMachine.currentState == BattleStateMachine.BattleStates.PLAYERCHOISE)
         {
             DrawPlayerInformation();
